@@ -1,5 +1,6 @@
 package com.example.technical_assignment
 
+import android.content.Context
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.LayoutInflater
@@ -109,6 +110,7 @@ class MainFragment : Fragment() {
     private lateinit var offersRecyclerView: RecyclerView
     private lateinit var offersAdapter: OffersAdapter
     private lateinit var viewModel: MainViewModel
+    private lateinit var editText1: EditText
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -121,6 +123,10 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         offersRecyclerView = view.findViewById(R.id.offers_recycler_view)
+        editText1 = view.findViewById(R.id.editText1)
+
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+        editText1.setText(sharedPref?.getString("edit_text_1", ""))
 
         offersAdapter = OffersAdapter(listOf())
         offersRecyclerView.adapter = offersAdapter
@@ -134,7 +140,6 @@ class MainFragment : Fragment() {
             offersAdapter.updateOffers(offers)
         })
 
-        // Вставьте этот код здесь
         val editText1 = view.findViewById<EditText>(R.id.editText1)
         val editText2 = view.findViewById<EditText>(R.id.editText2)
 
@@ -150,6 +155,15 @@ class MainFragment : Fragment() {
         editText1.filters = arrayOf(filter)
         editText2.filters = arrayOf(filter)
     }
+    override fun onPause() {
+        super.onPause()
+
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        with (sharedPref.edit()) {
+            putString("edit_text_1", editText1.text.toString())
+            apply()
+        }
+    }
 
 }
 
@@ -164,18 +178,16 @@ class PlaceholderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val button: Button = view.findViewById(R.id.button) // Замените на ID вашей кнопки
+        val button: Button = view.findViewById(R.id.button)
         button.setOnClickListener {
             val lastFragment = (activity as MainActivity).lastFragment
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.fragment_container, lastFragment ?: MainFragment())
                 ?.commit()
 
-            // Обновите активный элемент в BottomNavigationView
             if (lastFragment is MainFragment) {
                 (activity as MainActivity).bottomNavigation.setSelectedItemId(R.id.navigation_tickets)
             } else {
-                // Установите ID другого элемента, если у вас есть другие фрагменты
             }
         }
     }
