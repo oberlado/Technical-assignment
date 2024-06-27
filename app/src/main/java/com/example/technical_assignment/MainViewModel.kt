@@ -19,6 +19,7 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
             }
         }
     }
+
     fun getTicketOffers() {
         viewModelScope.launch {
             repository.getTicketOffers()

@@ -5,7 +5,13 @@ import retrofit2.http.GET
 
 data class Offer(val id: Int, val title: String, val town: String, val price: Price)
 data class Price(val value: Int)
-data class TicketOffer(val id: Int, val title: String, val time_range: List<String>, val price: Price)
+data class TicketOffer(
+    val id: Int,
+    val title: String,
+    val time_range: List<String>,
+    val price: Price
+)
+
 data class Ticket(
     val id: Int,
     val badge: String?,
@@ -21,6 +27,7 @@ data class Ticket(
     val is_returnable: Boolean,
     val is_exchangable: Boolean
 )
+
 data class Location(val town: String, val date: String, val airport: String)
 data class Luggage(val has_luggage: Boolean, val price: Price?)
 data class HandLuggage(val has_hand_luggage: Boolean, val size: String?)
